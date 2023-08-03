@@ -1,0 +1,150 @@
+---
+title: "R Best Practices for ADF&G Biometricans"
+author: "ADF&G Standards Group"
+date: :"June 30, 2023"
+format: html
+editor: visual
+---
+
+This document outlines coding best practices in R for biometricians and quantitative biologists within ADF&G, with the hope that a common framework will facilitate collaboration and code review. Coding best practices work in tandem with the Department's operational planning and reporting polices to facilitate reproducible research.  
+
+The main objective is to make code easily readable, understandable, and reproducible. A second objective is to give all ADF&G staff members a common starting point while learning the coding best practices for their responsibilities. Although this document was written to improve R coding practices, most of the recommendations can be applied to other programming languages (e.g., SAS). If more coding guidance is desired, there are many coding guides on the web that are available for reference (see Appendix).
+
+#### Purpose of Having Coding Standards:
+
+-   Gives a uniform appearance to the codes written by different staff.  **(Remember someone else will be taking over your code.)** 
+
+-   Improves readability and maintainability of the code and reduces complexity. 
+
+-   Facilitates code reuse and error detection. 
+
+-   Promotes sound programming practices and increases efficiency. 
+
+## General Coding Best Practices
+
+Coding conventions and standards differ among languages, but here are some general guidelines. 
+
+1.  **Use a consistent folder structure for all analysis** 
+
+    -   Project/Analysis name
+        -   scripts -- all scripts
+
+        -   functions -- functions can be sourced within the main code 
+
+        -   data -- any data sets used in the project or analysis 
+
+            -   raw data -- everything in here is treated as a read only file (never adjust the contents of this file). If changes are required, they should be done via code and communicate back to the database manager for correction 
+
+            -   If data are confidential, write a note in the script explaining how to call the data (e.g., OceanAK), where it is stored on an ADF&G server, or whom to contact. 
+
+        -   reports -- FDS reports, operational plans and other documents associated with this analysis. 
+
+        -   output -- Popular options include summary tables, csv files, excel files, jags posteriors, simulation objects, figures. 
+    -   You can add to this basic structure with additional folders, for example: rmarkdown (markdown files and outputs), literature (references that are pertinent to the project), models (statistical model scripts), data processing/management. 
+    -   In addition, a README file stored in the main project directory can be very helpful for orienting a new user. 
+    -   Multiple year analyses are generally set up such that there is a separate folder for each year within which resides specific files with relevance for each year. For example:
+        -   2022
+            -   scripts
+
+            -   outputs
+
+            -   \...
+        -   2023
+            -   scripts
+
+            -   outputs
+
+            -   ...
+
+2.  **Use standard and informative headers:** For better understanding among multiple staff (current and future) and long-term maintenance of analyses, each script should begin with a header that follows a standard format, including the following information:
+
+    -   Title
+    -   Date of creation
+    -   Author
+    -   Synopsis of what the code does
+    -   Notes: major modifications, dependencies.
+
+3.  **Use a standard template for your script:** Following a general code template (see Appendix) will help us all read each other's code:
+
+    -   Header
+    -   Load packages/libraries, source function scripts
+    -   Read/Clean data inputs
+    -   Analysis
+    -   Write/Save outputs
+
+4.  **Have a naming convention for local variables, global variables, constants, and functions:**
+
+    -   Keep names short but descriptive. Meaningful and understandable variables and function names help collaborators to differentiate items in the coding environment. In general, variable names should be nouns and function names should be verbs.
+    -   The best naming convention will vary depending on the application. The most important thing is to be consistent within one script and/or project. On large projects, a glossary of parameter names can help keep the naming convention understandable.
+    -   Rename/reformat columns, as needed, immediately after importing a dataset.\
+    -   Avoid using the same names for multiple purposes. For example, variables with the same name in global and local environments can lead to confusing results.
+    -   Avoid numbers in variable names unless they are informative.
+        -   E.g., length500 for a variable which contains the number of fish greater than 500mm in length is informative.\
+        -   Incremental names are not informative. If used, their meaning should be described in a comment (e.g., what do object names "S1", "S2", and "S3" stand for?)
+    -   Use consistent parameter names in the code and the methods for the associated report.
+
+5.  **Indentation and whitespace:** Proper indentation and judicious use of whitespace (e.g., spaces between sections) are very important in enhancing the readability of the code (See Appendix). Be consistent throughout the entire script.
+
+6.  **Code should be well documented:**
+
+    -   Commenting greatly increases the understandability of the code. Comments should be brief, relevant, and used conservatively within the script. Examples of places to comment code:
+        -   Adding links to the origin of copied code or to cite (credit) the person who wrote a specific function
+        -   Explaining a complex piece of code
+        -   Explaining what a block of code (or each step of a pipe) does
+        -   Adding details about units, precision, or the treatment of null values. For example: instead of naming a variable catch_kg, make a comment at the beginning of the script that catch is in kg, unless otherwise stated, then name the variable catch.
+        -   If you're doing something different than previous years
+    -   Document major updates and issues.
+        -   The simplest way to document major updates is using version comments in the header under the Modification History (e.g., "May 2022: changed the statistical analysis to consider year").\
+        -   GitHub is a great tool to track updates, note future code improvements, and report issues. See appendix for more guidance on using GitHub.
+
+7.  **Modularize your code:** Whenever possible, write universal functions for small discrete tasks. If you have many functions, place them all into one script and source that script into your main code. An extension of this practice is to write utility scripts for larger discrete tasks and source that from your main code.
+
+8.  **Format dates using the international date/time standard format (ISO 8601), which is yyyy-mm-dd:** Dates regularly have confounding errors. Make sure to clean dates at the beginning of a script and make all formats consistent since the dates you receive will likely not be in the same format.
+
+## R and Rstudio best practices
+
+There are many programming languages and integrated development environments out there. R and RStudio are the most frequently used by ADF&G staff and are recommended for new staff.
+
+1.  **Use RStudio Projects:**
+
+    -   Creating an RStudio project makes file paths within the project relative to the location of the RStudio project file (.Rproj).
+    -   Use the file structure above to organize your Rstudio projects. The .Rproj file should exist in the main directory ("project/analysis name" above).
+    -   This approach is considerably more stable than absolute paths created in the setwd() orthodox. Use of setwd() should be reserved for sharing small pieces of code in situations where the code will not be further developed.
+    -   The renv package will create a package environment for your project. Package updates and retirements can alter results and break your code.
+
+2.  **Don't save your work environment:** In RStudio, go to "Tools \> Global Options \> Save workspace to .Rdata on exit", change it to "Never" and your workspace will not be saved. This practice forces you to rerun your code each time to make sure you haven't broken anything. If the analyses are lengthy, complex or time consuming, then save specific output files, which can then be sourced.
+
+3.  **Use R Markdown:** When appropriate, use R Markdown to generate output documents in Word, PDF, and html formats. Using R Markdown allows you to include code and analyses within the file that produces the output document, reducing the likelihood of copy and paste errors. Using R Markdown also increases efficiency by allowing you to easily regenerate the document following a data set update or tweak to the code.
+
+4.  **R Script tips and tricks:**
+
+    -   RStudio snippets can be used to insert a standard header at the top of each script.
+    -   Avoid using too many packages. Add comments for obscure packages explaining the functionality it provides. You can also specify package names when using functions to avoid conflicts between packages (e.g. dplyr::rename vs. rename).\
+    -   Outline your code
+        -   Use section names such as \# load ---- or \# data ---- (the keyboard shortcut is (Control-Shift-R) to create breaks and make it easy to navigate within your scripts and make lengthy analyses much easier to follow.
+        -   These breaks are visible as an outline (top right corner of the source pane in R studio)
+        -   Can create subsections (# \* load ----) or subsections of subsections (# \* \* load ----)
+    -   Use pipes to chain together multiple, related operations.
+    -   Rename all columns immediately after importing data to descriptive, connected variables (e.g., fish_count) with a consistent convention (e.g. snake_case, lowerCamel, etc.)
+    -   The clean_names() function in the janitor package is an easy way to rename all columns consistently.
+    -   Object names in R are case specific. Use capital letters sparingly if at all. It can be difficult to remember arbitrary capitalization in variable and function names.
+    -   Ensure dates are imported as Date class.
+    -   Use \<-, not = for assignments. This helps distinguish object assignments from passing values or objects to function arguments.\
+    -   Use TRUE and FALSE, not T or F (the latter can be reassigned, the former cannot).
+    -   Place spaces around all binary operators (=, +, -, \<-, etc.). Do not place a space before a comma, but always place one after a comma. Place a space before left parenthesis, except in a function call. There should be a hard return after pipe operators (e.g., \|\> or %\>%).
+    -   RStudio can automatically re-indent/format your code Code à Reformat Code (shortcut is Ctrl + Shift + A)
+    -   The autocomplete functionality in RStudio is a great way to avoid misspelling functions, data objects, and file paths.
+    -   R abides by the Unix standard of using forward slashes (/) to navigate directories while Windows systems use backward slashes (). R has trouble parsing character strings with a single backward slash; if you are using a Windows pathway in an R object one option is to convert backward slashes to forward slashes (e.g., change read.csv("file\data.csv") to read.csv("file/data.csv").
+    -   When typing file paths, "/" refers to your root directory (e.g. C drive if working locally on a windows machine), "./" refers to your current working directory (location of your .Rproj file), "../" refers to the parent directory, "../../" to the grandparent, and so on. The here package is an option to simplify relative files paths.\
+    -   You can comment out multiple lines of code in RStudio by highlighting and pressing Ctrl + Shift + C.
+
+## Resources
+
+Although this document was based on recommendations from ADF&G employees, many of the recommendations were summarized from outside resources including:
+
+-   https://style.tidyverse.org/
+-   https://www.geeksforgeeks.org/coding-standards-and-guidelines/
+-   https://github.com/Kristories/awesome-guidelines
+-   https://google.github.io/styleguide/Rguide.xml
+
+## Appendix
