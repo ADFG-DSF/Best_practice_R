@@ -4,3 +4,4 @@ This repository contains a Quarto document detailing R and Rstudio best practice
 
 The network location for this repository is S:\RTS\Reimer\Best_practice_R.
 
+The R best practice document can be viewed at https://adfg-dsf.github.io/Best_practice_R/Best_practice_R.html.
