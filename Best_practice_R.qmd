@@ -25,7 +25,7 @@ R commands in the text below will be shown using inline code blocks (e.g. `<-`).
 
 1.  **Use RStudio Projects:**
 
-    -   To create a new RStudio project: "*File* \> *New Project...* \> *New Directory* \> *New Project* \> (*Provide a Directory name and location*) \> *Create Project"*".
+    -   To create a new RStudio project: "*File* \> *New Project...* \> *New Directory* \> *New Project* \> (*Provide a Directory name and location*) \> *Create Project*".
         -   Checking the box next to "*Create a git repository"* will initialize a git repository in the project directory.
         -   Checking the box next to "*Use renv with this project"* will create a package environment for your project, which will protect your analysis from package updates and retirements.
     -   RStudio projects make file paths within the project relative to the location of the RStudio project file (.Rproj). This provides stability because relative file locations (e.g., `"./raw data.xlsx"`) will not break if the project folder is moved to a new location.
@@ -139,7 +139,7 @@ lapply(packs, require, character.only = TRUE)
 
 11. **Use Quarto or R Markdown:** 
     -   When appropriate, use Quarto or R Markdown to generate output documents in Word, PDF, and html formats. Using Quarto or R Markdown allows you to produce high-quality, self-contained output documents directly from code, reducing the likelihood of copy and paste or version errors. Using Quarto or R Markdown is also efficient since you can easily regenerate the entire output following a data set update or modification of the code.
-    -   To create a new Quarto document: "*File* \> *New File* \> *Quarto Document...* \> *Document* or *Presentation* or *Interactive* \> (*Pick the type of document/presentation to create and type in a Title for the document/presentation; Pick the Engine and Editor as well if need be*) \> *Create"*".
+    -   To create a new Quarto document: "*File* \> *New File* \> *Quarto Document...* \> *Document* or *Presentation* or *Interactive* \> (*Pick the type of document/presentation to create and type in a Title for the document/presentation; Pick the Engine and Editor as well if need be*) \> *Create*".
     -   To create a new R Markdown document: "*File* \> *New File* \> *R Markdown...* \> *Document* or *Presentation* or *Shiny* or *From Template* \> (*Pick the type of document/presentation to create, type in a Title for the document/presentation, and check or uncheck box about using current date when rendering document; Or pick the template to use*) \> *OK*".
 
 ## RStudio tips and tricks
