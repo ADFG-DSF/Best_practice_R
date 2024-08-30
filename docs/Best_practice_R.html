@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.217">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -80,12 +80,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
   "keyboard-shortcut": [
     "f",
     "/",
     "s"
   ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -94,6 +95,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -141,87 +143,109 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
+
 
 <p>This document outlines coding best practices in R for biometricians and quantitative biologists within ADF&amp;G, with the hope that a common framework will facilitate collaboration and code review. The main objective is to make code easily readable, understandable, and reproducible. A second objective is to give all ADF&amp;G staff members a common starting point while learning to use R to achieve their job responsibilities. Coding best practices work in tandem with the Department’s operational planning and reporting polices to facilitate reproducible research.</p>
 <section id="conventions-used-in-this-document" class="level2">
 <h2 class="anchored" data-anchor-id="conventions-used-in-this-document">Conventions used in this document</h2>
-<p>When point and click sequences are referenced in this text the sequence will be enclosed in “quotations”, button names will be shown in <em>italic</em>, button names in the series will be separated by and the greater than symbol (&gt;) and any actions required will be described using (<em>italics</em> <em>enclosed in parenthesis</em>). Keystrokes will be described with regular font enclosed in quotations.</p>
-<p>Example R scripts will he shown in code blocks:</p>
+<p>When point and click sequences are referenced in this text, the sequence will be enclosed in “quotations”. Button names will be shown in <em>italic</em>. Button names in the point and click sequence will be separated by the greater than symbol (&gt;). Any actions required will be described using italics enclosed in parentheses, such as (<em>italics enclosed in parentheses</em>). For example, reference the following point and click sequence: “<em>Button name</em> &gt; <em>Button name</em> &gt; (<em>Required action described</em>)”. Keystrokes will be described with regular font enclosed in quotations, e.g., “Control+Shift+R”.</p>
+<p>Example R scripts will be shown in code blocks:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#example</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="dv">48</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>R commands which are referenced in the text will be shown using inline code blocks (e.g.&nbsp;<code>&lt;-</code>).</p>
+<p>R commands in the text below will be shown using inline code blocks (e.g.&nbsp;<code>&lt;-</code>).</p>
 </section>
 <section id="r-and-rstudio-best-practices" class="level2">
 <h2 class="anchored" data-anchor-id="r-and-rstudio-best-practices">R and Rstudio Best Practices&nbsp;</h2>
 <ol type="1">
 <li><p><strong>Use RStudio Projects:</strong></p>
 <ul>
-<li>To create a new RStudio project: “<em>File</em> &gt; <em>New Project…</em> &gt; <em>New Directory</em> &gt; <em>New Project</em> &gt; (<em>provide a name and location</em>) &gt; <em>create project”</em>.
+<li>To create a new RStudio project: “<em>File</em> &gt; <em>New Project…</em> &gt; <em>New Directory</em> &gt; <em>New Project</em> &gt; (<em>Provide a Directory name and location</em>) &gt; <em>Create Project</em>”.
 <ul>
-<li>Checking the box next to “<em>create git repository”</em> will initialize a git repository in the project directory.</li>
-<li>Checking the box next to “<em>Use renv with this project”</em> will create a package environment for your project which will protect your analysis from package updates and retirements.</li>
+<li>Checking the box next to “<em>Create a git repository”</em> will initialize a git repository in the project directory.</li>
+<li>Checking the box next to “<em>Use renv with this project”</em> will create a package environment for your project, which will protect your analysis from package updates and retirements.</li>
 </ul></li>
-<li>RStudio projects make file paths within the project relative to the location of the RStudio project file (.Rproj). This provides stability because relative file locations (<code>".\\raw data.xlsx")</code> will not break if the project folder is moved to a new location.
+<li>RStudio projects make file paths within the project relative to the location of the RStudio project file (.Rproj). This provides stability because relative file locations (e.g., <code>"./raw data.xlsx"</code>) will not break if the project folder is moved to a new location.
 <ul>
-<li>This approach is more stable than absolute paths created in the setwd(). Use of setwd() should be reserved for sharing small pieces of code in situations where the code will not be further developed.</li>
+<li>This approach is more stable than absolute paths created using <code>setwd()</code>. Use of <code>setwd()</code> should be reserved for sharing small pieces of code in situations where the code will not be further developed.</li>
+<li>Refer to the RStudio tips and tricks section below to learn more about file paths.</li>
 </ul></li>
 </ul></li>
-<li><p><strong>Don’t save your work environment:</strong> In RStudio, go to “<em>Tools</em> &gt; <em>Global Options</em> &gt; <em>Save workspace to .Rdata on exit</em>, (<em>change selection to ‘Never’</em>)”. This practice ensures programming errors are not masked by orphaned objects in your workspace. If the analyses are lengthy, complex or time consuming the deliberate practice of saving specific output files, which can be sourced later, is more stable.</p></li>
+<li><p><strong>Don’t save your work environment:</strong></p>
+<ul>
+<li>To ensure your work environment is never saved when exiting RStudio, go to “<em>Tools</em> &gt; <em>Global Options</em> &gt; <em>Save workspace to .RData on exit</em>, (<em>Change selection to ‘Never’</em>)”.</li>
+<li>This practice ensures programming errors are not masked by orphaned objects in your workspace.</li>
+<li>If the analyses are lengthy, complex, or time consuming, the deliberate practice of saving specific output files, which can be sourced later, is more stable.</li>
+</ul></li>
 <li><p><strong>Use a consistent folder structure within each RStudio project:</strong>&nbsp;</p>
 <ul>
 <li>Project/Analysis name
 <ul>
-<li>scripts – R scripts for performing fisheries analysis</li>
-<li>functions – R scripts containing functions can be sourced when needed in other scripts&nbsp;</li>
-<li>data – any data sets used in the project or analysis&nbsp;
+<li>scripts – This folder contains the R scripts used to perform fisheries analysis.</li>
+<li>data – This folder contains any data sets used in the project or analysis and any code required to prepare the data for analysis.&nbsp;
 <ul>
-<li><p>raw data – raw data is read only (i.e.&nbsp;never adjust the contents of a raw data file). If changes are required they should be done via code prior to the analysis. If errors are located they should communicated back to the database manager for correction.&nbsp;</p></li>
-<li><p>If data are confidential, write a comment in the script explaining how to call the data (e.g.&nbsp;OceanAK), where it is stored on an ADF&amp;G server, or whom to contact.&nbsp;</p></li>
+<li>The raw data file for the project should be a read-only file (i.e.&nbsp;never adjust the contents of a raw data file). If changes are required, they should be done via code prior to the analysis. If errors are located, they should be communicated back to the database manager for correction.&nbsp;</li>
+<li>If data are confidential, write a comment in the script explaining how to call the data, where it is stored on an ADF&amp;G server, or whom to contact.&nbsp;</li>
 </ul></li>
-<li>reports – FDS reports, operational plans and other documents associated with the analysis&nbsp;</li>
-<li>output – Summary tables, csv files, excel files, jags posteriors, simulation objects, figures.&nbsp;</li>
+<li>reports – This folder contains FDS reports, operational plans, and any other documents associated with the analysis.</li>
+<li>README file – This file stored in the main project directory can be very helpful for orienting a new user.</li>
+<li>You can add to this basic structure with additional folders such as: functions (R scripts containing functions, which can be sourced when needed in other scripts),&nbsp;output (summary tables, .csv files, Excel files, JAGS posteriors, .RData files, simulation objects, figures, etc.),&nbsp;R Markdown (R Markdown files and outputs), Quarto (Quarto files and outputs), literature (references that are pertinent to the project), and models (statistical model scripts).</li>
 </ul></li>
-<li>You can add to this basic structure with additional folders such as: rmarkdown (markdown files and outputs), literature (references that are pertinent to the project), models (statistical model scripts), data processing/management.&nbsp;</li>
-<li>In addition, a README file stored in the main project directory can be very helpful for orienting a new user.</li>
-<li>Multiple year analyses are generally set up such that there is a separate folder for each year within which resides specific files with relevance for each year.</li>
+<li>Multiple year analyses are generally set up such that there is a separate folder for each year, within which resides the above folder structure (e.g., 2019 folder contains scripts, data, and reports folders).</li>
+<li>This practice helps to create a common framework to facilitate collaboration, code review, and the reproducibility of projects.</li>
 </ul></li>
 </ol>
 <div id="fig-folders" class="quarto-layout-panel">
-<figure class="figure">
-<div class="quarto-layout-row quarto-layout-valign-top">
-<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 100.0%;justify-content: center;">
-<div id="fig-folder_general" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="folder_general.png" class="img-fluid figure-img" data-ref-parent="fig-folders"></p>
-<figcaption class="figure-caption">(a) Folder structure when project data is analyzed at once.</figcaption>
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-folders-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-folders" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-folder_general" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-folder_general-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="folder_general.png" class="img-fluid figure-img" data-ref-parent="fig-folders">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-folder_general-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Folder structure when project data is analyzed at once.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<div class="quarto-layout-row quarto-layout-valign-top">
-<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 100.0%;justify-content: center;">
-<div id="fig-folder_annual" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="folder_annual.png" class="img-fluid figure-img" data-ref-parent="fig-folders"></p>
-<figcaption class="figure-caption">(b) Folder structure for separate, annual analyses of each year’s data.</figcaption>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-folders" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-folder_annual" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-folder_annual-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="folder_annual.png" class="img-fluid figure-img" data-ref-parent="fig-folders">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-folder_annual-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Folder structure for separate, annual analyses of each year’s data.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1: Typical folder structures for ADF&amp;G fisheries analyses.</figcaption><p></p>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-folders-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Typical folder structures for ADF&amp;G fisheries analyses.
+</figcaption>
 </figure>
 </div>
 <ol start="4" type="1">
-<li><p><strong>Use informative headers:</strong> For better understanding among multiple staff (current and future) and long-term maintenance of analyses, each script should begin with a header that includes at least the following information:</p>
+<li><p><strong>Use informative headers:</strong></p>
 <ul>
-<li>Synopsis of what the code does</li>
+<li>For better understanding among multiple staff (current and future) and long-term maintenance of analyses, each script should begin with a header that includes at least the following information:
+<ul>
+<li>Synopsis of what the code does and which project uses the code pertains</li>
 <li>Author</li>
 <li>Date of creation</li>
-<li>Required packages</li>
-<li>Other information a new analyst might find helpful: e.g.&nbsp;parameter names/descriptions, major modification history, dependencies.</li>
+<li>Other information a new analyst might find helpful: required packages, parameter names/descriptions, major modification history, dependencies, etc.</li>
+</ul></li>
+<li>Refer to the RStudio tips and tricks section below to learn about using snippets to create informative headers.</li>
 </ul></li>
 </ol>
 <div class="cell">
@@ -239,46 +263,79 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="5" type="1">
-<li><p><strong>Use a standard template for your script:</strong> Following a general code template will help us all read each others code:</p>
+<li><p><strong>Use a standard template for your script:</strong></p>
+<ul>
+<li>Following a general coding template will help us all read eachother’s code:
 <ul>
 <li>Header</li>
-<li>Read/Clean data inputs</li>
+<li>Required packages</li>
+<li>Read data/Clean data</li>
 <li>Analysis</li>
 <li>Write/Save output figures and tables</li>
 </ul></li>
+<li>Refer to the RStudio tips and tricks section below to learn about snippets to create a standard template and about using outlines to organize your R script.</li>
+</ul></li>
 <li><p><strong>Have a naming convention for local variables, global variables, constants, and functions:</strong></p>
 <ul>
-<li>Keep names short but descriptive. Meaningful and understandable variables and function names help collaborators differentiate items in the coding environment. In general, variable names should be nouns and function names should be verbs.</li>
+<li>Keep names short but descriptive. Meaningful and understandable variable and function names help collaborators differentiate items in the coding environment. In general, variable names should be nouns and function names should be verbs.</li>
 <li>The best naming convention will vary depending on the application. The most important thing is to be consistent within each script and/or project. On large projects, a glossary of parameter names can help keep the naming convention understandable.</li>
-<li>Rename/reformat columns, as needed, immediately after importing a dataset.</li>
+<li>Rename/reformat columns, as needed, immediately after importing data.</li>
 <li>Do not use the same name for multiple purposes. For example, variables with the same name in global and local environments can lead to confusing results.</li>
 <li>Avoid numbers in variable names unless they are informative.
 <ul>
-<li>E.g., length500 for a variable which contains the number of fish greater than 500mm in length is informative.</li>
-<li>Incremental names are not informative (e.g., what is contained in objects named “S1”, “S2”, and “S3”). If incremental names are used, their meaning should be described in comments.</li>
+<li>E.g., length500 for a variable that contains the number of fish greater than 500 mm in length is informative.</li>
+<li>Incremental names are not informative (e.g., using S1, S2, and S3 as variables containing the number of fish greater than 300 mm, 400 mm, and 500 mm). If incremental names are used, their meaning should be described in comments.</li>
 </ul></li>
 <li>Use consistent parameter names in the code and the methods of the associated report.</li>
+<li>Refer to the RStudio tips and tricks section below to learn about the <code>clean_names()</code> function and a tip about capital letters in object names.</li>
 </ul></li>
-<li><p><strong>Indentation and whitespace:</strong> Proper indentation and judicious use of whitespace (e.g., spaces between sections) are very important in enhancing the readability of the code. Be consistent throughout the entire script.</p></li>
+<li><p><strong>Indentation and whitespace:</strong></p>
+<ul>
+<li>Proper indentation and judicious use of whitespace (e.g., spaces between sections) are very important in enhancing the readability of the code.</li>
+<li>Be consistent throughout the entire script.</li>
+<li>Refer to the RStudio tips and tricks section below to learn tips for including whitespace, see an example of having proper indentation and a judicious use of whitespace, and to learn a tip about reindenting or reformatting code.</li>
+</ul></li>
 <li><p><strong>Code should be well documented:</strong></p>
 <ul>
-<li>Commenting makes your code more understandable. Comments should be brief, relevant, and used conservatively within the script. Examples of places to comment code:
+<li><p>Commenting makes your code more understandable.</p></li>
+<li><p>Comments should be brief, relevant, and used conservatively within the script.</p></li>
+<li><p>Examples of places to comment code:</p>
 <ul>
 <li>Adding links to the origin of copied code and/or to credit the original author</li>
 <li>Explaining a complex piece of code</li>
-<li>Explaining what a block of code (or each step of a pipe) does</li>
-<li>Adding details about units, precision, or the treatment of null values. For example: instead of naming a variable catch_kg, make a comment at the beginning of the script that catch is in kg, unless otherwise stated, then name the variable catch.</li>
-<li>To document changes from previous years</li>
-</ul></li>
-<li>Document major updates and issues.
+<li>Stating obscure packages used in the R script and explaining the functionality they provide</li>
+<li>Explaining what a block of code or what each step of a pipe does</li>
+<li>Adding details about units, precision, or the treatment of null values
 <ul>
-<li>The simplest way to document major updates is to include a modification history in the header (e.g., “May 2022: changed the statistical analysis to consider year”).</li>
+<li>For example: Instead of naming a variable catch_kg, make a comment at the beginning of the script that catch is in kg unless otherwise stated, and then name the variable catch.</li>
+</ul></li>
+<li>To document changes from previous years</li>
+<li>Document major updates and issues
+<ul>
+<li>The simplest way to document major updates is to include a modification history in the header (e.g., May 2022: changed the statistical analysis to consider year).</li>
 <li>Git/GitHub is a great tool to track updates, note future code improvements, and report issues. See <a href="https://github.com/ADFG-DSF/Git_book">ADFG-DSF/Git_book: A Quarto Book describing best practices for Git use at ADF&amp;G (github.com)</a> for more guidance on using GitHub.</li>
 </ul></li>
 </ul></li>
-<li><p><strong>Write functions for repetitive tasks:</strong> Whenever possible, write universal functions for small discrete tasks. If you have many functions, place them all into one script and source that script into your main code. An extension of this practice is to write utility scripts for larger discrete tasks and source that from your main code.</p></li>
-<li><p><strong>Format dates using the international date/time standard format (ISO 8601), which is yyyy-mm-dd:</strong> Dates regularly cause errors. Format all date columns into ISO8601 at the beginning of a script to avoid problems later in the analysis.</p></li>
-<li><p><strong>Use Quarto:</strong> When appropriate, use Quarto to generate output documents in Word, PDF, and html formats. Using Quarto allows you to produce high-quality, self-contained output document directly from code, reducing the likelihood of copy and paste or version errors. Using Quarto is also efficienct since you can easily regenerate the entire output following a data set update or modification of the code.</p></li>
+</ul></li>
+<li><p><strong>Write functions for repetitive tasks:</strong></p>
+<ul>
+<li>Whenever possible, write universal functions for small discrete tasks.
+<ul>
+<li>If you have many functions, place them all into one script and source that script in your main code.</li>
+<li>An extension of this practice is to write utility scripts for larger discrete tasks and then source those scripts in your main code.</li>
+</ul></li>
+<li>This practice reduces the clutter of the script containing the main analysis so that the main code is easier to follow.</li>
+</ul></li>
+<li><p><strong>Format dates using the international date/time standard format (ISO 8601):</strong></p>
+<ul>
+<li>Dates regularly cause errors. Format all date columns into the international standard format (ISO 8601), which is yyyy-mm-dd, at the beginning of a script to avoid problems later in the analysis.</li>
+</ul></li>
+<li><p><strong>Use Quarto or R Markdown:</strong></p>
+<ul>
+<li>When appropriate, use Quarto or R Markdown to generate output documents in Word, PDF, and html formats. Using Quarto or R Markdown allows you to produce high-quality, self-contained output documents directly from code, reducing the likelihood of copy and paste or version errors. Using Quarto or R Markdown is also efficient since you can easily regenerate the entire output following a data update or modification of the code.</li>
+<li>To create a new Quarto document: “<em>File</em> &gt; <em>New File</em> &gt; <em>Quarto Document…</em> &gt; <em>Document</em> or <em>Presentation</em> or <em>Interactive</em> &gt; (<em>Pick the type of document/presentation to create and type in a Title for the document/presentation; Pick the Engine and Editor as well if need be</em>) &gt; <em>Create</em>”.</li>
+<li>To create a new R Markdown document: “<em>File</em> &gt; <em>New File</em> &gt; <em>R Markdown…</em> &gt; <em>Document</em> or <em>Presentation</em> or <em>Shiny</em> or <em>From Template</em> &gt; (<em>Pick the type of document/presentation to create, type in a Title for the document/presentation, and check or uncheck box about using current date when rendering document; Or pick the template to use</em>) &gt; <em>OK</em>”.</li>
+</ul></li>
 </ol>
 </section>
 <section id="rstudio-tips-and-tricks" class="level2">
@@ -286,10 +343,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li><p>RStudio can provide a script outline with navigation</p>
 <ul>
-<li>Insert section names such as <code>Read data</code> or <code>Format data</code> using the keyboard shortcut “Control-Shift-R”. These names will appear in your script as a comment with a separator following the name. Section names are visible as an outline (at top right corner of the source pane in R studio) which can be clicked to navigate through a lengthy piece of code.</li>
-<li>You can create subsections by preceding your name with <code>*</code> or sub-subsections by preceding your name with <code>* *</code>.</li>
+<li>Insert section names such as <code>Read data</code> or <code>Format data</code> using the keyboard shortcut “Control+Shift+R”. These names will appear in your script as a comment with a separator following the name.
+<ul>
+<li>Section names can also be typed in using at least one hash sign, then the section name, and then at least 4 dashes or equal signs. For example, <code># Load data ----</code> or <code>## Format data ====</code> would both create a section name.</li>
+<li>You can create subsections by preceding your section name with <code>*</code> or sub-subsections by preceding your section name with <code>**</code>.</li>
 </ul></li>
-<li><p>RStudio snippets can be used to insert a standard header and template in a new script. To create a header/template snippet navigate to “<em>Tools</em> &gt; <em>Edit Code Snippets…</em> &gt; (<em>paste the following at the bottom of the pop-up</em>) &gt; <em>Save</em>”.</p>
+<li>Section names are visible in an outline. This outline can be accessed by clicking the button with 5 horizontal lines at the top right corner of the source pane in RStudio. Section names in the outline can be clicked on to navigate through a lengthy piece of code.</li>
+</ul></li>
+<li><p>RStudio snippets can be used to insert a standard header and code template in a new R script.</p>
+<ul>
+<li>To create a header/code template snippet, go to “<em>Tools</em> &gt; <em>Edit Code Snippets…</em> &gt; (<em>Paste the following rscript snippet at the bottom of the pop-up</em>) &gt; <em>Save</em>”.</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>snippet rscript</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ${1:Description}</span></span>
@@ -314,27 +378,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Results -----------------------------------------------------------------</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>To use the snippet type <code>rscript</code> slowly in a blank R script and hit “Enter” when the command auto-completes. A standard header/code template will be added to your script with the cursor placed where the code description should be entered (see <a href="#fig-snippet_output" class="quarto-xref">Figure&nbsp;2</a>). After you have entered an appropriate description pressing the “Tab” key will take the cursor to the area where the analyst name should be entered, a third “Tab” keystroke will take the cursor to the area where packages can be specified and a forth “Tab” keystroke will take the cursor to the section where you can begin writing your code. Notice the snippet creates section names and the associated preliminary outline.</p></li>
+<ul>
+<li>To use the rscript snippet, type <code>rscript</code> slowly in a blank R script and hit “Enter” when the command auto-completes. A standard header and code template will be added to your script with the cursor placed where the code description should be entered (see <a href="#fig-snippet_output" class="quarto-xref">Figure&nbsp;2</a>). After you have entered an appropriate description, pressing the “Tab” key will take the cursor to the area where the author’s name should be entered. A third “Tab” keystroke will take the cursor to the area where packages can be specified, and a forth “Tab” keystroke will take the cursor to the section where you can begin writing your code. Notice the snippet creates section names and the associated preliminary outline.</li>
+</ul></li>
 </ul>
-<div id="fig-snippet_output" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="snippet_output.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: The output of the rscript snippet on a blank R script.</figcaption>
+<div id="fig-snippet_output" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-snippet_output-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="snippet_output.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-snippet_output-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: The output of the rscript snippet in a blank R script.
+</figcaption>
 </figure>
 </div>
 <ul>
-<li><p>Add comments for obscure packages explaining the functionality they provide. You can also specify package names (e.g.&nbsp;<code>dplyr::rename</code> vs.&nbsp;<code>rename</code>) when using uncommon functions to make the dependency clear and/or avoid conflicts between packages.</p></li>
-<li><p>Use pipes (<code>%&gt;%)</code> to chain together multiple, related operations where the intermediate steps are of little interest.</p></li>
-<li><p>The <code>clean_names()</code> function in the janitor package is an easy way to rename all columns consistently.</p></li>
+<li><p>You can specify package names (e.g.&nbsp;<code>dplyr::rename</code> vs.&nbsp;<code>rename</code>) when using uncommon functions to make the dependency clear and/or avoid conflicts between packages.</p></li>
+<li><p>Use pipes (<code>%&gt;%</code> or <code>|&gt;</code>) to chain together multiple, related operations where the intermediate steps are of little interest. Note that the piping operator <code>%&gt;%</code> requires the <code>dplyr</code> package to be loaded, whereas the native piping operator <code>|&gt;</code> requires no packages to be loaded.</p></li>
+<li><p>The <code>clean_names()</code> function in the <code>janitor</code> package is an easy way to rename all columns consistently.</p></li>
 <li><p>Object names in R are case specific. Use capital letters sparingly if at all. It can be difficult to remember arbitrary capitalization in variable and function names.</p></li>
-<li><p>Use <code>&lt;-</code> (not <code>=</code>) for assignments. This helps distinguish object assignments from passing values/objects to function arguments.</p></li>
+<li><p>Use <code>&lt;-</code> (not <code>=</code>) for object assignments. This helps distinguish object assignments from passing values/objects to function arguments. Make sure to use <code>=</code> (not <code>&lt;-</code>) in function arguments to avoid making “accidental” objects.</p></li>
 <li><p>Use <code>TRUE</code> and <code>FALSE</code>, not <code>T</code> or <code>F</code> (the latter can be reassigned, the former cannot).</p></li>
-<li><p>Place spaces around all binary operators (<code>=</code>, <code>+</code>, <code>-</code>, <code>&lt;-</code>, etc.). Do not place a space before a comma, but always place one after a comma. Place a space before left parenthesis or curly brackets, except in a function call. There should be a hard return after pipe operators.</p>
+<li><p>Place spaces around all binary operators (<code>=</code>, <code>+</code>, <code>-</code>, <code>&lt;-</code>, etc.). Do not place a space before a comma, but always place one after a comma. Place a space before a left parenthesis or left curly bracket, except in a function call. There should be a hard return after pipe operators.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># An example of R script spacing</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>human_age <span class="ot">&lt;-</span> <span class="cf">function</span>(dog_age){</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#args: dog_age = The age of a medium sized dog in years</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#return: The equivalent human age (in years) for the dog</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>human_age <span class="ot">&lt;-</span> <span class="cf">function</span>(dog_age) {</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># args: dog_age = the age of a medium-sized dog in years</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># return: the equivalent human age (in years) for the dog</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># from https://www.akc.org/expert-advice/health/how-to-calculate-dog-years-to-human-years/</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(dog_age <span class="sc">&gt;=</span> <span class="dv">0</span>, dog_age <span class="sc">&lt;=</span> <span class="dv">20</span>)</span>
@@ -349,16 +419,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  output</span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co"># An example of hard returns in a pipe sequence.</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co"># An example of hard returns in a pipe sequence</span></span>
 <span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span></span>
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(...) <span class="sc">%&gt;%</span></span>
 <span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
-<li><p>RStudio can automatically re-indent/format your code “<em>Code &gt; Reformat Code</em>”. The keystroke shortcut is “Ctrl + Shift + A”</p></li>
-<li><p>The auto-complete functionality in RStudio is a great way to avoid misspelling functions, data objects, and file paths.</p></li>
-<li><p>R abides by the Unix standard of using forward slashes (/) to navigate directories while Windows systems use backward slashes (\). R has trouble parsing character strings with a single backward slash; if you are using a Windows pathway in an R object one option is to convert backward slashes to forward slashes (e.g., change <code>read.csv(".\data.csv")</code> to <code>read.csv("./data.csv")</code>.</p></li>
-<li><p>When typing file paths, <code>"/"</code> refers to your root directory (e.g.&nbsp;C drive if working locally on a windows machine), <code>"./"</code> refers to your current working directory (location of your .Rproj file), <code>"../"</code> refers to the parent directory, <code>"../../"</code> to the grandparent, and so on. The here package is an option to simplify relative files paths.</p></li>
-<li><p>You can comment out multiple lines of code in RStudio by highlighting and pressing “Ctrl + Shift + C”.</p></li>
+<li><p>RStudio can automatically reformat your code. Go to “<em>Code</em> &gt; <em>Reformat Code</em>”. The keystroke shortcut is “Ctrl+Shift+A”.</p></li>
+<li><p>The autocomplete functionality in RStudio is a great way to avoid misspelling functions, data objects, and file paths.</p></li>
+<li><p>R abides by the Unix standard of using forward slashes (/) to navigate directories, while Windows systems use backward slashes (\). R has trouble parsing character strings with a single backward slash. So if you are using a Windows pathway in an R object, one option is to convert backward slashes to forward slashes (e.g., change <code>read.csv(".\data.csv")</code> to <code>read.csv("./data.csv")</code>.</p></li>
+<li><p>When typing file paths, <code>"/"</code> refers to your root directory (e.g., C drive if working locally on a Windows machine), <code>"./"</code> refers to your current working directory (location of your .Rproj file), <code>"../"</code> refers to the parent directory, <code>"../../"</code> to the grandparent, and so on. The <code>here</code> package is an option to simplify relative file paths.</p></li>
+<li><p>You can comment out multiple lines of code in RStudio by highlighting and pressing “Ctrl+Shift+C”.</p></li>
 </ul>
 </section>
 <section id="resources" class="level2">
@@ -454,6 +524,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -488,24 +576,64 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
   const processXRef = (id, note) => {
-    if (id.startsWith('sec-')) {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
       // Special case sections, only their first couple elements
       const container = document.createElement("div");
       if (note.children && note.children.length > 2) {
-        for (let i = 0; i < 2; i++) {
-          container.appendChild(note.children[i].cloneNode(true));
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
         }
         return container.innerHTML
       } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
         return note.innerHTML;
       }
     } else {
-      return note.innerHTML;
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
     }
   }
   for (var i=0; i<xrefs.length; i++) {
@@ -514,27 +642,56 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       instance.disable();
       let url = xref.getAttribute('href');
       let hash = undefined; 
-      try { hash = new URL(url).hash; } catch {}
-      const id = hash.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      if (note !== null) {
-        try {
-          const html = processXRef(id, note);
-          instance.setContent(html);
-        } finally {
-          instance.enable();
-          instance.show();
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
         }
       } else {
-        // See if we can fetch this
-        fetch(url.split('#')[0])
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
         .then(res => res.text())
         .then(html => {
           const parser = new DOMParser();
           const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.getElementById(id);
+          const note = htmlDoc.querySelector('main.content');
           if (note !== null) {
-            const html = processXRef(id, note);
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
             instance.setContent(html);
           } 
         }).finally(() => {
@@ -612,6 +769,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {

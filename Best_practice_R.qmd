@@ -32,23 +32,22 @@ R commands in the text below will be shown using inline code blocks (e.g. `<-`).
         -   This approach is more stable than absolute paths created using `setwd()`. Use of `setwd()` should be reserved for sharing small pieces of code in situations where the code will not be further developed.
         -   Refer to the RStudio tips and tricks section below to learn more about file paths.
 
-2.  **Don't save your work environment:** 
+2.  **Don't save your work environment:**
 
-    -   To ensure your work environment is never saved when exiting RStudio, go to "*Tools* \> *Global Options* \> *Save workspace to .RData on exit*, (*Change selection to 'Never'*)". 
-    -   This practice ensures programming errors are not masked by orphaned objects in your workspace. 
-        -   If the analyses are lengthy, complex, or time consuming, the deliberate practice of saving specific output files, which can be sourced later, is more stable.
+    -   To ensure your work environment is never saved when exiting RStudio, go to "*Tools* \> *Global Options* \> *Save workspace to .RData on exit*, (*Change selection to 'Never'*)".
+    -   This practice ensures programming errors are not masked by orphaned objects in your workspace.
+    -   If the analyses are lengthy, complex, or time consuming, the deliberate practice of saving specific output files, which can be sourced later, is more stable.
 
 3.  **Use a consistent folder structure within each RStudio project:** 
 
     -   Project/Analysis name
         -   scripts -- This folder contains the R scripts used to perform fisheries analysis.
-        -   data -- This folder contains any data sets used in the project or analysis. 
+        -   data -- This folder contains any data sets used in the project or analysis and any code required to prepare the data for analysis. 
             -   The raw data file for the project should be a read-only file (i.e. never adjust the contents of a raw data file). If changes are required, they should be done via code prior to the analysis. If errors are located, they should be communicated back to the database manager for correction. 
-            -   If data are confidential, write a comment in the script explaining how to call the data (e.g., OceanAK), where it is stored on an ADF&G server, or whom to contact. 
+            -   If data are confidential, write a comment in the script explaining how to call the data, where it is stored on an ADF&G server, or whom to contact. 
         -   reports -- This folder contains FDS reports, operational plans, and any other documents associated with the analysis.
         -   README file -- This file stored in the main project directory can be very helpful for orienting a new user.
-        -   You can add to this basic structure with additional folders such as: functions (R scripts containing functions, which can be sourced when needed in other scripts), output (summary tables, .csv files, Excel files, JAGS posteriors, .RData files, simulation objects, figures, etc.), R Markdown (R Markdown files and outputs), Quarto (Quarto files and outputs), literature (references that are pertinent to the project), models (statistical model scripts), and data processing/management.
-
+        -   You can add to this basic structure with additional folders such as: functions (R scripts containing functions, which can be sourced when needed in other scripts), output (summary tables, .csv files, Excel files, JAGS posteriors, .RData files, simulation objects, figures, etc.), R Markdown (R Markdown files and outputs), Quarto (Quarto files and outputs), literature (references that are pertinent to the project), and models (statistical model scripts).
     -   Multiple year analyses are generally set up such that there is a separate folder for each year, within which resides the above folder structure (e.g., 2019 folder contains scripts, data, and reports folders).
     -   This practice helps to create a common framework to facilitate collaboration, code review, and the reproducibility of projects.
 
@@ -60,14 +59,14 @@ R commands in the text below will be shown using inline code blocks (e.g. `<-`).
 Typical folder structures for ADF&G fisheries analyses.
 :::
 
-4.  **Use informative headers:** 
+4.  **Use informative headers:**
 
     -   For better understanding among multiple staff (current and future) and long-term maintenance of analyses, each script should begin with a header that includes at least the following information:
-        -   Synopsis of what the code does and which project the code pertains to
+        -   Synopsis of what the code does and which project uses the code pertains
         -   Author
         -   Date of creation
         -   Other information a new analyst might find helpful: required packages, parameter names/descriptions, major modification history, dependencies, etc.
-    -   Refer to the RStudio tips and tricks section below to learn about snippets.
+    -   Refer to the RStudio tips and tricks section below to learn about using snippets to create informative headers.
 
 ```{r}
 # Find the most common words and word pairs in the DSF Gotham Culture survey results.
@@ -84,21 +83,21 @@ lapply(packs, require, character.only = TRUE)
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ```
 
-5.  **Use a standard template for your script:** 
+5.  **Use a standard template for your script:**
 
-    -   Following a general coding template will help us all read each other's code:
+    -   Following a general coding template will help us all read eachother's code:
         -   Header
         -   Required packages
-        -   Read/Clean data inputs
+        -   Read data/Clean data
         -   Analysis
         -   Write/Save output figures and tables
-    -   Refer to the RStudio tips and tricks section below to learn about snippets and using an outline for an R script.
+    -   Refer to the RStudio tips and tricks section below to learn about snippets to create a standard template and about using outlines to organize your R script.
 
 6.  **Have a naming convention for local variables, global variables, constants, and functions:**
 
     -   Keep names short but descriptive. Meaningful and understandable variable and function names help collaborators differentiate items in the coding environment. In general, variable names should be nouns and function names should be verbs.
     -   The best naming convention will vary depending on the application. The most important thing is to be consistent within each script and/or project. On large projects, a glossary of parameter names can help keep the naming convention understandable.
-    -   Rename/reformat columns, as needed, immediately after importing a dataset.
+    -   Rename/reformat columns, as needed, immediately after importing data.
     -   Do not use the same name for multiple purposes. For example, variables with the same name in global and local environments can lead to confusing results.
     -   Avoid numbers in variable names unless they are informative.
         -   E.g., length500 for a variable that contains the number of fish greater than 500 mm in length is informative.
@@ -106,39 +105,45 @@ lapply(packs, require, character.only = TRUE)
     -   Use consistent parameter names in the code and the methods of the associated report.
     -   Refer to the RStudio tips and tricks section below to learn about the `clean_names()` function and a tip about capital letters in object names.
 
-7.  **Indentation and whitespace:** 
-    -   Proper indentation and judicious use of whitespace (e.g., spaces between sections) are very important in enhancing the readability of the code. 
-    -   Be consistent throughout the entire script. 
-    -   Refer to the RStudio tips and tricks section below to learn tips for including whitespace, see an example of having proper indentation and a judicious use of whitespace, and to learn a tip about reindenting or reformatting code. 
+7.  **Indentation and whitespace:**
+
+    -   Proper indentation and judicious use of whitespace (e.g., spaces between sections) are very important in enhancing the readability of the code.
+    -   Be consistent throughout the entire script.
+    -   Refer to the RStudio tips and tricks section below to learn tips for including whitespace, see an example of having proper indentation and a judicious use of whitespace, and to learn a tip about reindenting or reformatting code.
 
 8.  **Code should be well documented:**
 
-    -   Commenting makes your code more understandable. 
-    -   Comments should be brief, relevant, and used conservatively within the script. 
+    -   Commenting makes your code more understandable.
+
+    -   Comments should be brief, relevant, and used conservatively within the script.
+
     -   Examples of places to comment code:
 
         -   Adding links to the origin of copied code and/or to credit the original author
         -   Explaining a complex piece of code
         -   Stating obscure packages used in the R script and explaining the functionality they provide
         -   Explaining what a block of code or what each step of a pipe does
-        -   Adding details about units, precision, or the treatment of null values 
+        -   Adding details about units, precision, or the treatment of null values
             -   For example: Instead of naming a variable catch_kg, make a comment at the beginning of the script that catch is in kg unless otherwise stated, and then name the variable catch.
         -   To document changes from previous years
         -   Document major updates and issues
             -   The simplest way to document major updates is to include a modification history in the header (e.g., May 2022: changed the statistical analysis to consider year).
             -   Git/GitHub is a great tool to track updates, note future code improvements, and report issues. See [ADFG-DSF/Git_book: A Quarto Book describing best practices for Git use at ADF&G (github.com)](https://github.com/ADFG-DSF/Git_book) for more guidance on using GitHub.
 
-9.  **Write functions for repetitive tasks:** 
+9.  **Write functions for repetitive tasks:**
 
-    -   Whenever possible, write universal functions for small discrete tasks. 
-        -   If you have many functions, place them all into one script and source that script in your main code. 
-            -   An extension of this practice is to write utility scripts for larger discrete tasks and then source those scripts in your main code.
-    -   This practice reduces the clutter of the script containing the main analysis so that the main code is easier to follow. 
+    -   Whenever possible, write universal functions for small discrete tasks.
+        -   If you have many functions, place them all into one script and source that script in your main code.
+        -   An extension of this practice is to write utility scripts for larger discrete tasks and then source those scripts in your main code.
+    -   This practice reduces the clutter of the script containing the main analysis so that the main code is easier to follow.
 
-10. **Format dates using the international date/time standard format (ISO 8601), which is yyyy-mm-dd:** Dates regularly cause errors. Format all date columns into the international standard format (ISO 8601) at the beginning of a script to avoid problems later in the analysis.
+10. **Format dates using the international date/time standard format (ISO 8601):**
 
-11. **Use Quarto or R Markdown:** 
-    -   When appropriate, use Quarto or R Markdown to generate output documents in Word, PDF, and html formats. Using Quarto or R Markdown allows you to produce high-quality, self-contained output documents directly from code, reducing the likelihood of copy and paste or version errors. Using Quarto or R Markdown is also efficient since you can easily regenerate the entire output following a data set update or modification of the code.
+    -   Dates regularly cause errors. Format all date columns into the international standard format (ISO 8601), which is yyyy-mm-dd, at the beginning of a script to avoid problems later in the analysis.
+
+11. **Use Quarto or R Markdown:**
+
+    -   When appropriate, use Quarto or R Markdown to generate output documents in Word, PDF, and html formats. Using Quarto or R Markdown allows you to produce high-quality, self-contained output documents directly from code, reducing the likelihood of copy and paste or version errors. Using Quarto or R Markdown is also efficient since you can easily regenerate the entire output following a data update or modification of the code.
     -   To create a new Quarto document: "*File* \> *New File* \> *Quarto Document...* \> *Document* or *Presentation* or *Interactive* \> (*Pick the type of document/presentation to create and type in a Title for the document/presentation; Pick the Engine and Editor as well if need be*) \> *Create*".
     -   To create a new R Markdown document: "*File* \> *New File* \> *R Markdown...* \> *Document* or *Presentation* or *Shiny* or *From Template* \> (*Pick the type of document/presentation to create, type in a Title for the document/presentation, and check or uncheck box about using current date when rendering document; Or pick the template to use*) \> *OK*".
 
@@ -146,12 +151,13 @@ lapply(packs, require, character.only = TRUE)
 
 -   RStudio can provide a script outline with navigation
 
-    -   Insert section names such as `Read data` or `Format data` using the keyboard shortcut "Control+Shift+R". These names will appear in your script as a comment with a separator following the name. 
-        -    Section names can also be typed in using at least one hash sign, then the section name, and then at least 4 dashes or equal signs. For example, `# Load data ----` or `## Format data ====` would both create a section name. 
+    -   Insert section names such as `Read data` or `Format data` using the keyboard shortcut "Control+Shift+R". These names will appear in your script as a comment with a separator following the name.
+        -   Section names can also be typed in using at least one hash sign, then the section name, and then at least 4 dashes or equal signs. For example, `# Load data ----` or `## Format data ====` would both create a section name.
         -   You can create subsections by preceding your section name with `*` or sub-subsections by preceding your section name with `**`.
     -   Section names are visible in an outline. This outline can be accessed by clicking the button with 5 horizontal lines at the top right corner of the source pane in RStudio. Section names in the outline can be clicked on to navigate through a lengthy piece of code.
 
--   RStudio snippets can be used to insert a standard header and code template in a new R script. 
+-   RStudio snippets can be used to insert a standard header and code template in a new R script.
+
     -   To create a header/code template snippet, go to "*Tools* \> *Edit Code Snippets...* \> (*Paste the following rscript snippet at the bottom of the pop-up*) \> *Save*".
 
     ```{r}
@@ -222,12 +228,13 @@ lapply(packs, require, character.only = TRUE)
       ggplot(...)
     ```
 
--   RStudio can automatically reindent or reformat your code. Go to "*Code* \> *Reformat Code*". The keystroke shortcut is "Ctrl+Shift+A".
+-   RStudio can automatically reformat your code. Go to "*Code* \> *Reformat Code*". The keystroke shortcut is "Ctrl+Shift+A".
 
 -   The autocomplete functionality in RStudio is a great way to avoid misspelling functions, data objects, and file paths.
 
 -   R abides by the Unix standard of using forward slashes (/) to navigate directories, while Windows systems use backward slashes (\\). R has trouble parsing character strings with a single backward slash. So if you are using a Windows pathway in an R object, one option is to convert backward slashes to forward slashes (e.g., change `read.csv(".\data.csv")` to `read.csv("./data.csv")`.
-    -   When typing file paths, `"/"` refers to your root directory (e.g., C drive if working locally on a Windows machine), `"./"` refers to your current working directory (location of your .Rproj file), `"../"` refers to the parent directory, `"../../"` to the grandparent, and so on. The `here` package is an option to simplify relative file paths.
+
+-   When typing file paths, `"/"` refers to your root directory (e.g., C drive if working locally on a Windows machine), `"./"` refers to your current working directory (location of your .Rproj file), `"../"` refers to the parent directory, `"../../"` to the grandparent, and so on. The `here` package is an option to simplify relative file paths.
 
 -   You can comment out multiple lines of code in RStudio by highlighting and pressing "Ctrl+Shift+C".
 
